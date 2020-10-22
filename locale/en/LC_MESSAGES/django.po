@@ -1,0 +1,130 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-10-08 13:31+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "COMMENT_NOTIFICATION_SUBJECT"
+msgstr "[{0}]New Comment"
+
+msgid "COMMENT_NOTIFICATION_MESSAGE"
+msgstr "A comment has been posted."
+
+msgid "AUTHOR_FLAGS_HELP"
+msgstr "Bit flags [0]:Comment ON/OFF"
+
+msgid "BLOG_FLAGS_HELP"
+msgstr "Bit flags [0]:Comment ON/OFF"
+
+msgid "BLOG_TITLE_HELP"
+msgstr "This field is updated by blog_update tool."
+
+msgid "Unapproved"
+msgstr ""
+
+msgid "Approved"
+msgstr ""
+
+msgid "Deleted"
+msgstr ""
+
+msgid "Favor"
+msgstr ""
+
+msgid "Category"
+msgstr ""
+
+msgid "Updated"
+msgstr ""
+
+msgid "Timestamp"
+msgstr ""
+
+msgid "Comment"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Reply"
+msgstr ""
+
+msgid "BLOG_NOTHING"
+msgstr "There is no blog."
+
+msgid "COMMENT_NOTHING"
+msgstr "There is no comment."
+
+msgid "Comment Entry"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "COMMENT_NOTE"
+msgstr "the comment is displayed if the author approves."
+
+msgid "Confirm"
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Comment Edit"
+msgstr ""
+
+msgid "Update"
+msgstr ""
+
+msgid "Reply Entry"
+msgstr ""
+
+msgid "COMMENT_ENTRY"
+msgstr "Input Comment."
+
+msgid "COMMENT_CONFIRM"
+msgstr "Do you save the comment?"
+
+msgid "Previous"
+msgstr ""
+
+msgid "Next"
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "Input Error"
+msgstr ""
+
+msgid "COMMENT_REGISTERED"
+msgstr "Comment was registered."
+
+msgid "REPLY_REGISTERED"
+msgstr "Reply was registered."
+
+msgid "COMMENT_UPDATED"
+msgstr "Comment was updated."
+
+msgid "Japanese"
+msgstr ""
+
+msgid "English"
+msgstr ""

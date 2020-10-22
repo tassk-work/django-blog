@@ -1,0 +1,15 @@
+{% extends 'blog/detail.html' %}
+{% block blog_title %}
+Sample note
+{% endblock %}
+
+{% block meta_description %}This is a sample note.{% endblock %}
+
+{% block blog_content %}
+<p>
+    This is a sample page.
+</p>
+<pre><code>{% filter force_escape %}
+sample code...
+{% endfilter %}</code></pre>
+{% endblock %}

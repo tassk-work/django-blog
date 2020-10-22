@@ -1,0 +1,8 @@
+{% extends 'blog/blog_base.html' %}
+
+{% block blog_main %}
+  {% include 'blog/blog_list.html' %}
+  <form action="{% url 'blog:search' view.kwargs.author_name %}" method="GET">
+    {% include 'blog/pagination.html' %}
+  </form>
+{% endblock %}

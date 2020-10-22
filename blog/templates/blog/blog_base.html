@@ -1,0 +1,51 @@
+{% extends 'blog/base.html' %}
+{% load app_tags %}
+{% block head_title %}{{ view.kwargs.author.title_text }}{% endblock %}
+{% block meta_description %}{{ view.kwargs.author.aside_text|striptags2 }}{% endblock %}
+{% block main %}
+  <div class="container">
+    {% include 'blog/blog_header.html' %}
+  </div>
+  <main class="container mt-3">
+    <div class="row">
+      <div class="col-md-8 blog-main">
+        <div id="alert_container">
+          {% for message in messages %}
+            <div class="alert {{ message.tags }} alert-dismissible fade show" id="default_alert" role="alert">
+              <div class="message-text">{{ message }}</div>
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          {% endfor %}
+          <div class="alert alert-dismissible fade show" id="default_alert" role="alert" style="display:none;">
+            <div class="message-text"></div>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        </div>
+        {% block blog_main %}{% endblock %}
+      </div>
+      <aside class="col-md-4 blog-sidebar">
+        <div class="position-sticky">
+          {% block aside1 %}
+            <div class="p-3 mb-3 bg-light rounded">
+              <p class="mb-0">{{ view.kwargs.author.aside_text|safe }}</p>
+            </div>
+          {% endblock %}
+          {% block aside2 %}
+            <div class="mb-3">
+              {% category_summary view.kwargs.author.id %}
+            </div>
+          {% endblock %}
+          {% block aside3 %}
+            <div>
+              {% blog_favor view.kwargs.author.id 3 %}
+            </div>
+          {% endblock %}
+        </div>
+      </aside>
+    </div>
+  </main>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'blog/blog_base.html' %}
+{% load i18n %}
+
+{% block blog_main %}
+<div class="input-group mb-3">
+  {{ form.keyword }}
+  <button type="button" id="search" class="btn btn-light">{% trans 'Search' %}</button>
+</div>
+{% include 'blog/blog_list.html' %}
+<form action="{% url 'blog:search' view.kwargs.author_name %}" method="GET">
+  {% include 'blog/pagination.html' %}
+  {{ form.keyword.as_hidden }}
+</form>
+{% endblock %}

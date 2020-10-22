@@ -1,0 +1,20 @@
+{% load i18n %}
+{% if blogs %}
+  <ul class="list-group">
+    {% for blog in blogs %}
+      <li class="list-group-item">
+        <h3 class="list-title">
+          <a href="{% url 'blog:detail' view.kwargs.author_name blog.id %}">{{ blog.title_text }}</a>
+        </h3>
+        <div>
+          {% for bc in blog.categories %}
+            <a href="#" data-category-text="{{ bc.category.category_text }}" class="category badge badge-light"><span>{{ bc.category.category_text }}</span></a>
+          {% endfor %}
+        </div>
+        <p class="list-summary">{{ blog.summary_text|truncatechars:100 }}</p>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>{% trans 'BLOG_NOTHING' %}</p>
+{% endif %}

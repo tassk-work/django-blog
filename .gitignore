@@ -4,3 +4,4 @@ __pycache__/
 /log/*
 /tmp/*
 config/settings/local.py
+*.code-workspace

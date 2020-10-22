@@ -2,9 +2,9 @@ from .base import *
 
 ALLOWED_HOSTS = ['*']
 
-MIDDLEWARE.insert(0, 'blog.log.LogMiddleware')
+MIDDLEWARE.insert(0, 'config.log.LogMiddleware')
 
-CONTENTS_DIR = os.path.join(BASE_DIR.parent, 'blog-contents')
+CONTENTS_DIR = os.path.join(BASE_DIR.parent, 'djang-blog-contents')
 
 DATABASES['default']['NAME'] = os.path.join(CONTENTS_DIR, 'db.sqlite3')
 

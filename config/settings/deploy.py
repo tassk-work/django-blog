@@ -4,7 +4,7 @@ ALLOWED_HOSTS = ['*']
 
 MIDDLEWARE.insert(0, 'config.log.LogMiddleware')
 
-CONTENTS_DIR = os.path.join(BASE_DIR.parent, 'djang-blog-contents')
+CONTENTS_DIR = os.path.join(BASE_DIR.parent, 'django-blog-contents')
 
 DATABASES['default']['NAME'] = os.path.join(CONTENTS_DIR, 'db.sqlite3')
 
@@ -38,7 +38,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, 'log/django.log'),
+            'filename': os.path.join(BASE_DIR, 'log/debug.log'),
             'maxBytes': 1024 * 1024 * 1,
             'backupCount': 5,
             'formatter': 'verbose',

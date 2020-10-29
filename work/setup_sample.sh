@@ -17,4 +17,4 @@ user.groups.set([group])
 user.save()
 EOF
 
-python manage.py loaddata work/dumpdata.json
+python manage.py loaddata work/sample_dump.json

@@ -41,13 +41,13 @@ class PostStatus(models.IntegerChoices):
 class Post(AplModel):
     template_text = models.CharField(max_length=20)
     status = models.IntegerField(choices=PostStatus.choices, default=PostStatus.DRAFT)
-    flags = models.IntegerField(default=0, help_text=_lazy('BLOG_FLAGS_HELP'))
+    flags = models.IntegerField(default=0, help_text=_lazy('POST_FLAGS_HELP'))
     view_count = models.IntegerField(default=0)
     created_date = models.DateTimeField(default=timezone.now)
-    updated_date = models.DateTimeField(null=False, blank=True, default=timezone.now, help_text=_lazy('BLOG_TITLE_HELP'))
+    updated_date = models.DateTimeField(null=False, blank=True, default=timezone.now, help_text=_lazy('POST_TITLE_HELP'))
 
     def __str__(self):
-        return f'{self.template_text}:{str(self.status)}'
+        return f'{self.template_text}'
 
     @property
     def is_comment(self):
@@ -76,9 +76,9 @@ class LanguageCode(models.TextChoices):
 class PostContent(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     language_code = models.CharField(choices=LanguageCode.choices, default=LanguageCode.JA, max_length=2)
-    title_text = models.CharField(max_length=100, null=False, blank=True, help_text=_lazy('BLOG_TITLE_HELP'))
-    summary_text = models.CharField(max_length=1000, null=True, blank=True, help_text=_lazy('BLOG_TITLE_HELP'))
-    search_text = models.CharField(max_length=5000, null=False, blank=True, help_text=_lazy('BLOG_TITLE_HELP'))
+    title_text = models.CharField(max_length=100, null=False, blank=True, help_text=_lazy('POST_TITLE_HELP'))
+    summary_text = models.CharField(max_length=1000, null=True, blank=True, help_text=_lazy('POST_TITLE_HELP'))
+    search_text = models.CharField(max_length=5000, null=False, blank=True, help_text=_lazy('POST_TITLE_HELP'))
 # codeend:PostContent
 
 # codestart:Category

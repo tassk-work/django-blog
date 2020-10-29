@@ -27,11 +27,11 @@ msgstr "A comment has been posted."
 msgid "AUTHOR_FLAGS_HELP"
 msgstr "Bit flags [0]:Comment ON/OFF"
 
-msgid "BLOG_FLAGS_HELP"
+msgid "POST_FLAGS_HELP"
 msgstr "Bit flags [0]:Comment ON/OFF"
 
-msgid "BLOG_TITLE_HELP"
-msgstr "This field is updated by blog_update tool."
+msgid "POST_TITLE_HELP"
+msgstr "This field is updated by post_update tool."
 
 msgid "Unapproved"
 msgstr ""

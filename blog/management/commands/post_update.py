@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 from blog import models
 
-# codestart:001
+# codestart:Const
 WORD_EXCLUDES = ('public', 'void', 'null', 'var', 'return')
 RE_PATTERNS = (
     (r'^.*# code(start|end).*$', ''),
@@ -22,6 +22,9 @@ RE_PATTERNS = (
     (r'&lt;.+?&gt;',''),
     (r'[;!=?,]+', ' '),
 )
+# codeend:Const
+
+# codestart:Command
 class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('templates')
@@ -87,4 +90,4 @@ class Command(BaseCommand):
             words.append(word)
         search_text = ' '.join(words)
         return search_text
-# codeend:001
+# codeend:Command

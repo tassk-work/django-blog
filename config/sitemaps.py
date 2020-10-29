@@ -6,6 +6,7 @@ from django.urls import reverse
 from blog import models
 from blog.lib import common
 
+# codestart:BlogSitemap
 class BlogSitemap(Sitemap):
     def get_language_codes(self, url):
         pass
@@ -36,6 +37,7 @@ class BlogSitemap(Sitemap):
             })
             url['alternates'] = alternates
         return urls
+# codeend:BlogSitemap
 
 # codestart:AuthorSitemap
 class AuthorSitemap(BlogSitemap):
@@ -53,7 +55,6 @@ class AuthorSitemap(BlogSitemap):
     
     def get_language_codes(self, url):
         return common.get_author_language_codes(url['item']['id'])
-    
 # codeend:AuthorSitemap
 
 # codestart:PostSitemap

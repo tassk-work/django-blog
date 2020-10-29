@@ -1,10 +1,12 @@
 from django.contrib import admin
 from django.contrib.auth.models import User as AuthUser
 from django.contrib.auth.admin import UserAdmin as AuthUserAdmin
+from django.template.defaultfilters import truncatechars
 from django.urls import reverse
 from django.utils.html import format_html
 
 from . import models
+from blog.lib import utils
 
 # codestart:AuthorUser
 class AuthorInline(admin.StackedInline):
@@ -73,13 +75,18 @@ class RelatedModelAdmin(admin.ModelAdmin):
 
 # codestart:Author
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ('author_name', 'title_text', 'email', 'flags', 'post')
+    list_display = ('author_name', 'title_text_link', 'email', 'flags', 'post')
     ordering = ('id',)
     search_fields = ('author_name', 'title_text', 'email')
     exclude = ('user',)
 
     def author_name(sef, obj):
         return obj.user.username
+
+    def title_text_link(sef, obj):
+        href = reverse('blog:index', kwargs={'author_name':obj.user.username})
+        return format_html('<a href="{}" target="blog">{}</a>', href, obj.title_text)
+    title_text_link.short_description = 'title_text'
 
     def post(sef, obj):
         href = reverse('blog:index', kwargs={'author_name':obj.user.username})
@@ -99,7 +106,7 @@ admin.site.register(models.Author, AuthorAdmin)
 
 # codestart:Post
 class PostAdmin(AplModelAdmin):
-    list_display = ['author', 'id', 'title_text', 'status', 'template_text_link', 'category', 'view_count']
+    list_display = ['id', 'author', 'title_text', 'status', 'template_text', 'category', 'view_count']
     ordering = ('author', 'id')
     list_filter = ['author', 'status']
     search_fields = ('template_text',)
@@ -107,11 +114,6 @@ class PostAdmin(AplModelAdmin):
     def title_text(sef, obj):
         href = reverse('blog:detail', kwargs={'author_name':obj.author.user.username, 'pk':obj.id})
         return format_html('<a href="{}" target="blog">{}</a>', href, obj.get_title_text())
-
-    def template_text_link(sef, obj):
-        href = reverse('blog:detail_test', kwargs={'author_name':obj.author.user.username, 'template_name':obj.template_text})
-        return format_html('<a href="{}" target="blog">{}</a>', href, obj.template_text)
-    template_text_link.short_description = "template_text"
 
     def category(sef, obj):
         return obj.postcategory_set.count()
@@ -121,11 +123,27 @@ admin.site.register(models.Post, PostAdmin)
 
 # codestart:PostContent
 class PostContentAdmin(RelatedModelAdmin):
-    list_display = ('post', 'author', 'language_code', 'title_text', 'summary_text')
-    ordering = ('post', 'language_code')
-    list_filter = ('post__author',)
+    list_display = ('id', 'post', 'language_code_short', 'title_text_link', 'summary_text_short')
+    ordering = ('post', 'id', 'language_code')
+    list_filter = ('post__author', 'language_code')
     search_fields = ('language_code', 'title_text', 'summary_text')
     raw_id_fields = ('post',)
+
+    def language_code_short(sef, obj):
+        return obj.language_code
+    language_code_short.short_description = 'lang'
+
+    def title_text_link(sef, obj):
+        href = utils.reverse('blog:detail', obj.language_code, {
+            'author_name': obj.post.author.user.username,
+            'pk': obj.post.id
+        })
+        return format_html('<a href="{}" target="blog">{}</a>', href, obj.title_text)
+    title_text_link.short_description = "title_text"
+
+    def summary_text_short(sef, obj):
+        return obj.summary_text[:20]
+    summary_text_short.short_description = "summary_text"
 
 admin.site.register(models.PostContent, PostContentAdmin)
 # codeend:PostContent

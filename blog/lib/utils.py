@@ -1,6 +1,7 @@
 import json
 from django.conf import settings
 from django.template import loader
+from django.urls import reverse as django_reverse
 
 def tostr(dict):
     return json.dumps(dict)
@@ -31,3 +32,7 @@ def get_languages(request, available_languages):
                 selectable_languages.append(language)
     if selectable_languages:
         return selectable_languages if len(selectable_languages) == 1 else enable_languages
+
+def reverse(viewname, language_code, kwargs):
+    lang = '' if language_code == settings.LANGUAGE_CODE else f'/{language_code}'
+    return f'{lang}{django_reverse(viewname, kwargs = kwargs)}'

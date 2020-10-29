@@ -27,11 +27,11 @@ msgstr "コメントが投稿されました。"
 msgid "AUTHOR_FLAGS_HELP"
 msgstr "ビットフラグ [0]:コメント機能有無"
 
-msgid "BLOG_FLAGS_HELP"
+msgid "POST_FLAGS_HELP"
 msgstr "ビットフラグ [0]:コメント機能有無"
 
-msgid "BLOG_TITLE_HELP"
-msgstr "本項目はブログ更新ツール blog_update.py により更新されます。"
+msgid "POST_TITLE_HELP"
+msgstr "本項目はブログ更新ツール post_update.py により更新されます。"
 
 msgid "Unapproved"
 msgstr "未承認"

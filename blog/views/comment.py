@@ -15,8 +15,8 @@ logger = logging.getLogger(__name__)
 
 # codestart:comment
 def comment(request, *args, **kwargs):
-    blog = get_object_or_404(models.Blog, pk=kwargs['blog_id'])
-    if not blog.is_comment or not blog.is_comment_entry:
+    post = get_object_or_404(models.Post, pk=kwargs['post_id'])
+    if not post.is_comment or not post.is_comment_entry:
         raise PermissionDenied
 
     form = forms.CommentForm(request.POST or None)
@@ -27,12 +27,12 @@ def comment(request, *args, **kwargs):
         })
     
     comment = form.save(commit=False)
-    comment.blog = blog
+    comment.post = post
     comment.client_text = get_client_ip(request)[0]
     comment.save()
 
     mails.comment_notification(request, comment)
-    logging.getLogger(constants.OPERATION_LOG).info({'blog':blog.id})
+    logging.getLogger(constants.OPERATION_LOG).info({'post':post.id})
     return JsonResponse({
         'status': 1,
         'message': _('COMMENT_REGISTERED'),
@@ -43,7 +43,7 @@ def comment(request, *args, **kwargs):
 def reply(request, *args, **kwargs):
     parent = get_object_or_404(models.Comment, pk=kwargs['comment_id'])
 
-    if not common.has_perm(request, constants.PERMISSION_COMMENT_REPLY, blog=parent, author=kwargs['author']):
+    if not common.has_perm(request, constants.PERMISSION_COMMENT_REPLY, post=parent, author=kwargs['author']):
         raise PermissionDenied
 
     form = forms.CommentForm(request.POST or None)
@@ -54,12 +54,12 @@ def reply(request, *args, **kwargs):
         })
     
     comment = form.save(commit=False)
-    comment.blog = parent.blog
+    comment.post = parent.post
     comment.parent = parent
     comment.client_text = get_client_ip(request)[0]
     comment.save()
 
-    logging.getLogger(constants.OPERATION_LOG).info({'blog':parent.blog.id, 'parent':parent.id})
+    logging.getLogger(constants.OPERATION_LOG).info({'post':parent.post.id, 'parent':parent.id})
     return JsonResponse({
         'status': 1,
         'message': _('REPLY_REGISTERED'),
@@ -69,7 +69,7 @@ def reply(request, *args, **kwargs):
 # codestart:comment_update
 def comment_update(request, *args, **kwargs):
     comment = get_object_or_404(models.Comment, pk=kwargs['comment_id'])
-    if not common.has_perm(request, constants.PERMISSION_COMMENT_EDIT, blog=comment.blog, author=kwargs['author']):
+    if not common.has_perm(request, constants.PERMISSION_COMMENT_EDIT, post=comment.post, author=kwargs['author']):
         raise PermissionDenied
     form = forms.CommentForm(request.POST or None)
     status = form['status'].data
@@ -81,7 +81,7 @@ def comment_update(request, *args, **kwargs):
     comment.status = int(status)
     comment.save()
     
-    logging.getLogger(constants.OPERATION_LOG).info({'blog':comment.blog.id, 'comment':comment.id})
+    logging.getLogger(constants.OPERATION_LOG).info({'post':comment.post.id, 'comment':comment.id})
     return JsonResponse({
         'status': 1,
         'data': {

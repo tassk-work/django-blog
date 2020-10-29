@@ -1,0 +1,9 @@
+{% load i18n %}
+<h4 class="font-italic">{% trans 'Favor' %}</h4>
+<ul class="list-group list-group-flush">
+    {% for post_content in favor_posts %}
+        <li class="list-group-item">
+            <a class="favor-title" href="{% url 'blog:detail' post_content.post.author.user.username post_content.post.id %}">{{ post_content.title_text }}</a>
+        </li>
+    {% endfor %}
+</ul>

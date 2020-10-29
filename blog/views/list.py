@@ -7,27 +7,31 @@ from django.views import generic
 from blog import forms
 from blog import models
 from blog.lib import constants
+from blog.lib import utils
 
 from . import base
 
 # codestart:BlogList
 class BlogList(generic.ListView):
-    model = models.Blog
-    context_object_name = 'blogs'
+    model = models.PostContent
+    context_object_name = 'posts'
     paginate_by = 10
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(author=self.kwargs['author'].id)
+        queryset = queryset.filter(
+                post__author=self.kwargs['author'].id,
+                language_code=self.request.LANGUAGE_CODE,
+            )
         if not self.request.user.is_authenticated:
-            queryset = queryset.filter(status__gte=models.BlogStatus.PUBLIC)
-        return queryset.order_by('-view_count')
+            queryset = queryset.filter(post__status__gte=models.PostStatus.PUBLIC)
+        return queryset.order_by('-post__view_count')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         object_list = context['object_list']
-        for blog in object_list:
-            blog.categories = list(blog.blogcategories_set.all())
+        for post_content in object_list:
+            post_content.categories = list(post_content.post.postcategory_set.all())
         return context
 # codeend:BlogList
 
@@ -64,10 +68,10 @@ class BlogSearch(base.CommonMixin, BlogList):
         if keyword:
             search_words = re.split(r'[ 　]+', keyword)
 
-        queries = [Q(author=self.kwargs['author'].id)]
+        queries = []
         category_ids = list(set(category_ids))
         if category_ids:
-            queries.append(Q(blogcategories__category_id__in=category_ids))
+            queries.append(Q(post__postcategory__category_id__in=category_ids))
 
         search_words = list(set(search_words))
         if search_words:

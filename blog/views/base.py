@@ -9,8 +9,10 @@ from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _
 
+from blog import models
 from blog.lib import constants
 from blog.lib import common
+from blog.lib import utils
 
 logger = logging.getLogger(__name__)
 
@@ -44,8 +46,9 @@ class CommonMixin():
     def get_template_names(self):
         template = super().get_template_names()
         self.kwargs['base_template'] = template[0]
-        if self.kwargs["author"].template_text:
-            template[0] = f'blog/{self.kwargs["author"].template_text}.html'
-            logger.debug(f'{self.kwargs["base_template"]}:{template[0]}')
+        language_codes = common.get_author_language_codes(self.kwargs['author'].id)
+        self.kwargs['available_languages'] = utils.get_languages(self.request, language_codes)
+        template[0] = utils.get_template_path(self.request, self.kwargs['author_name'], 'extends')
+        logger.debug(f'{self.kwargs["base_template"]}:{template[0]}')
         return template
 # codeend:CommonMixin

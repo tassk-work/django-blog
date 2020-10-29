@@ -2,6 +2,6 @@
 <h4 class="font-italic">{% trans 'Category' %}</h4>
 <div>
     {% for category in categories %}
-        <a href="#" data-category-text="{{ category.category__category_text }}" class="category badge badge-light"><span>{{ category.category__category_text }}</span> (<span>{{ category.blog__count }}</span>)</a>
+        <a href="#" data-category-text="{{ category.category__category_text }}" class="category badge badge-light"><span>{{ category.category__category_text }}</span> (<span>{{ category.post__count }}</span>)</a>
     {% endfor %}
 </div>

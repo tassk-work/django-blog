@@ -1,7 +1,7 @@
 {% load i18n %}
 {% trans 'COMMENT_NOTIFICATION_MESSAGE' %}
-{{ comment.blog.author.title_text }}
-{{ comment.blog.title_text }}
+{{ comment.post.author.title_text }}
+{{ comment.post.content.title_text }}
 {{ url }}
 
 ---

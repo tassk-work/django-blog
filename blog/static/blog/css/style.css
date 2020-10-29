@@ -55,7 +55,7 @@ a.favor-title {
 
 
 /* detail */
-.blog-created, .blog-updated, .comment-created, .comment-status, .comment-length {
+.post-created, .post-updated, .comment-created, .comment-status, .comment-length {
     font-size: 90%;
     color: #999;
 }

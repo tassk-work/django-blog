@@ -8,7 +8,7 @@ CONTENTS_DIR = os.path.join(BASE_DIR.parent, 'django-blog-contents')
 
 DATABASES['default']['NAME'] = os.path.join(CONTENTS_DIR, 'db.sqlite3')
 
-TEMPLATES[0]['DIRS'] = [os.path.join(CONTENTS_DIR, 'templates')]
+TEMPLATES[0]['DIRS'] += [os.path.join(CONTENTS_DIR, 'templates')]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 

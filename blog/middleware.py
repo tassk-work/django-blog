@@ -19,8 +19,8 @@ class BaseMiddleware(object):
             author = models.Author.objects.get(user__username=author_name)
             if author:
                 view_kwargs['author'] = author
-                blogs = models.Blog.objects.values('id', 'template_text').filter(author=author.id)
-                view_kwargs['blog_ids']  = {blog['template_text']:blog['id'] for blog in blogs}
+                posts = models.Post.objects.values('id', 'template_text').filter(author=author.id)
+                view_kwargs['post_ids']  = {post['template_text']:post['id'] for post in posts}
         session_messages = request.session.pop(constants.SESSION_MESSAGES, None)
         if session_messages:
             for message in session_messages:

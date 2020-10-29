@@ -1,17 +1,17 @@
 {% load i18n %}
-{% if blogs %}
+{% if posts %}
   <ul class="list-group">
-    {% for blog in blogs %}
+    {% for post_content in posts %}
       <li class="list-group-item">
         <h3 class="list-title">
-          <a href="{% url 'blog:detail' view.kwargs.author_name blog.id %}">{{ blog.title_text }}</a>
+          <a href="{% url 'blog:detail' view.kwargs.author_name post_content.post.id %}">{{ post_content.title_text }}</a>
         </h3>
         <div>
-          {% for bc in blog.categories %}
+          {% for bc in post_content.categories %}
             <a href="#" data-category-text="{{ bc.category.category_text }}" class="category badge badge-light"><span>{{ bc.category.category_text }}</span></a>
           {% endfor %}
         </div>
-        <p class="list-summary">{{ blog.summary_text|truncatechars:100 }}</p>
+        <p class="list-summary">{{ post_content.summary_text|truncatechars:100 }}</p>
       </li>
     {% endfor %}
   </ul>

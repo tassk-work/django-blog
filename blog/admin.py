@@ -58,32 +58,32 @@ class RelatedModelAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
         if not request.user.is_superuser:
-            queryset = queryset.filter(blog__author=request.user.author)
+            queryset = queryset.filter(post__author=request.user.author)
         return queryset
     
     def author(sef, obj):
-        return obj.blog.author
+        return obj.post.author
     
     def get_list_display(self, request):
         return set_author_by_user(request, super().get_list_display(request), 'author')
     
     def get_list_filter(self, request):
-        return set_author_by_user(request, super().get_list_filter(request), 'blog__author')
+        return set_author_by_user(request, super().get_list_filter(request), 'post__author')
 # codeend:RelatedModel
 
 # codestart:Author
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ('author_name', 'title_text', 'email', 'template_text', 'flags', 'blog')
+    list_display = ('author_name', 'title_text', 'email', 'flags', 'post')
     ordering = ('id',)
-    search_fields = ('author_name', 'title_text', 'email', 'template_text')
+    search_fields = ('author_name', 'title_text', 'email')
     exclude = ('user',)
 
     def author_name(sef, obj):
         return obj.user.username
 
-    def blog(sef, obj):
+    def post(sef, obj):
         href = reverse('blog:index', kwargs={'author_name':obj.user.username})
-        return format_html('<a href="{}" target="blog">{}</a>', href, obj.blog_set.count())
+        return format_html('<a href="{}" target="blog">{}</a>', href, obj.post_set.count())
 
     def email(sef, obj):
         return obj.user.email
@@ -97,17 +97,16 @@ class AuthorAdmin(admin.ModelAdmin):
 admin.site.register(models.Author, AuthorAdmin)
 # codeend:Author
 
-# codestart:Blog
-class BlogAdmin(AplModelAdmin):
-    list_display = ['author', 'id', 'title_text_link', 'status', 'template_text_link', 'category', 'view_count']
+# codestart:Post
+class PostAdmin(AplModelAdmin):
+    list_display = ['author', 'id', 'title_text', 'status', 'template_text_link', 'category', 'view_count']
     ordering = ('author', 'id')
     list_filter = ['author', 'status']
-    search_fields = ('title_text', 'template_text')
+    search_fields = ('template_text',)
     
-    def title_text_link(sef, obj):
+    def title_text(sef, obj):
         href = reverse('blog:detail', kwargs={'author_name':obj.author.user.username, 'pk':obj.id})
-        return format_html('<a href="{}" target="blog">{}</a>', href, obj.title_text)
-    title_text_link.short_description = "title_text"
+        return format_html('<a href="{}" target="blog">{}</a>', href, obj.get_title_text())
 
     def template_text_link(sef, obj):
         href = reverse('blog:detail_test', kwargs={'author_name':obj.author.user.username, 'template_name':obj.template_text})
@@ -115,10 +114,22 @@ class BlogAdmin(AplModelAdmin):
     template_text_link.short_description = "template_text"
 
     def category(sef, obj):
-        return obj.blogcategories_set.count()
+        return obj.postcategory_set.count()
 
-admin.site.register(models.Blog, BlogAdmin)
-# codeend:Blog
+admin.site.register(models.Post, PostAdmin)
+# codeend:Post
+
+# codestart:PostContent
+class PostContentAdmin(RelatedModelAdmin):
+    list_display = ('post', 'author', 'language_code', 'title_text', 'summary_text')
+    ordering = ('post', 'language_code')
+    list_filter = ('post__author',)
+    search_fields = ('language_code', 'title_text', 'summary_text')
+    raw_id_fields = ('post',)
+
+admin.site.register(models.PostContent, PostContentAdmin)
+# codeend:PostContent
+
 
 # codestart:Category
 class CategoryAdmin(AplModelAdmin):
@@ -130,23 +141,23 @@ class CategoryAdmin(AplModelAdmin):
 admin.site.register(models.Category, CategoryAdmin)
 # codeend:Category
 
-# codestart:BlogCategories
-class BlogCategoriesAdmin(RelatedModelAdmin):
-    list_display = ('author', 'category', 'blog')
-    ordering = ('category', 'blog')
-    list_filter = ('blog__author', 'category')
-    search_fields = ('category', 'blog')
-    raw_id_fields = ('category', 'blog')
+# codestart:PostCategory
+class PostCategoryAdmin(RelatedModelAdmin):
+    list_display = ('author', 'category', 'post')
+    ordering = ('category', 'post')
+    list_filter = ('post__author', 'category')
+    search_fields = ('category', 'post')
+    raw_id_fields = ('category', 'post')
     
-admin.site.register(models.BlogCategories, BlogCategoriesAdmin)
-# codeend:BlogCategories
+admin.site.register(models.PostCategory, PostCategoryAdmin)
+# codeend:PostCategory
 
 # codestart:Comment
 class CommentAdmin(RelatedModelAdmin):
-    list_display = ('author', 'id', 'comment_text', 'status', 'client_text', 'blog', 'parent', 'created_date')
+    list_display = ('author', 'id', 'comment_text', 'status', 'client_text', 'post', 'parent', 'created_date')
     ordering = ('-id',)
-    list_filter = ('blog__author', 'status',)
-    search_fields = ('comment_text', 'blog', 'client_text')
+    list_filter = ('post__author', 'status',)
+    search_fields = ('comment_text', 'post', 'client_text')
 
 admin.site.register(models.Comment, CommentAdmin)
 # codeend:Comment

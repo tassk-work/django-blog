@@ -2,7 +2,7 @@
 {% extends 'blog/blog_base.html' %}
 {% load i18n %}
 
-{% block head_title %}{{ blog.title_text }} - {{ view.kwargs.author.title_text }}{% endblock %}
+{% block head_title %}{% block head_post_title %}{{ object.content.title_text }}{% endblock %} - {% block head_author_title %}{{ view.kwargs.author.title_text }}{% endblock %}{% endblock %}
 
 {% block extra_css %}
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css">
@@ -11,24 +11,24 @@
 
 {# codestart:blog_main #}
 {% block blog_main %}
-  <h1 class="mt-3">{% block blog_title %}{{ blog.title_text }}{% endblock %}</h1>
+  <h1 class="mt-3">{% block post_title %}{{ object.content.title_text }}{% endblock %}</h1>
   <p class="ml-1 mb-0">
-    <span class="blog-created">{{ blog.created_date|date:"Y/m/d" }}</span>
-    <span class="blog-updated">（{% trans 'Updated' %}:{{ blog.updated_date|date:"Y/m/d" }}）</span>
+    <span class="post-created">{{ object.created_date|date:"Y/m/d" }}</span>
+    <span class="post-updated">（{% trans 'Updated' %}:{{ object.updated_date|date:"Y/m/d" }}）</span>
   </p>
   <div>
-    {% for bc in blog.categories %}
+    {% for bc in object.categories %}
       <a href="#" data-category-text="{{ bc.category.category_text }}" class="badge category badge-light"><span>{{ bc.category.category_text }}</span></a>
     {% endfor %}
   </div>
   <div class="mt-5">
-    {% block blog_content %}{% endblock %}
+    {% block post_content %}{% endblock %}
   </div>
   
-  {% if blog.is_comment %}
+  {% if object.is_comment %}
     <div>
       <h2>{% trans 'Comment' %}</h2>
-      {% for comment in blog.comments %}
+      {% for comment in object.comments %}
         <div class="comment" data-id="{{ comment.id }}" data-status="{{ comment.status }}">
           <div>
             <div class="comment-summary">
@@ -42,8 +42,12 @@
             </div>
             {% if request.user.is_authenticated %}
               <div class="float-right">
-                <button type="button" class="comment-edit btn btn-light">{% trans 'Edit' %}</button>
-                <button type="button" class="comment-reply btn btn-light">{% trans 'Reply' %}</button>
+                {% if object.is_comment_edit %}
+                  <button type="button" class="comment-edit btn btn-light">{% trans 'Edit' %}</button>
+                {% endif %}
+                {% if object.is_comment_reply %}
+                  <button type="button" class="comment-reply btn btn-light">{% trans 'Reply' %}</button>
+                {% endif %}
               </div>
             {% endif %}
           </div>
@@ -64,12 +68,10 @@
                         {% endif %}
                       </div>
                         <div class="float-right">
-                          {% if blog.is_comment_edit %}
+                          {% if object.is_comment_edit %}
                             <button type="button" class="comment-edit btn btn-light">{% trans 'Edit' %}</button>
                           {% endif %}
-                          {% if blog.is_comment_reply %}
                           <button type="button" class="comment-reply btn btn-light invisible">{% trans 'Reply' %}</button>
-                          {% endif %}
                         </div>
                     </div>
                     {{ reply.comment_text|linebreaks }}
@@ -82,7 +84,7 @@
       {% empty %}
         <p>{% trans 'COMMENT_NOTHING' %}</p>
       {% endfor %}
-      {% if blog.is_comment_entry %}
+      {% if object.is_comment_entry %}
         <div class="mb-3">
           <button type="button" id="comment_entry" class="btn btn-light">{% trans 'Comment Entry' %}</button>
         </div>
@@ -92,7 +94,7 @@
 {# codeend:blog_main #}
 
   {# codestart:modal #}
-  {% if blog.is_comment %}
+  {% if object.is_comment %}
     <div id="comment_modal" class="modal" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -106,7 +108,7 @@
             <div class="alert-container"></div>
             <div class="comment-wrapper"></div>
             <p id="comment_modal_message"></p>
-            <form id="comment_form" action="{% url 'blog:comment' view.kwargs.author_name blog.id %}" method="POST" onsubmit="return false;">
+            <form id="comment_form" action="{% url 'blog:comment' view.kwargs.author_name object.id %}" method="POST" onsubmit="return false;">
               <div class="form-group">
                 <label for="name_text">{% trans 'Name' %}</label>
                 <input type="text" id="name_text" name="name_text" placeholder="****">
@@ -133,7 +135,7 @@
       </div>
     </div>
 
-    {% if blog.is_comment_edit %}
+    {% if object.is_comment_edit %}
       <div id="comment_edit_modal" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -171,7 +173,7 @@
     $(function() {
       // Comment Entry
       $('#comment_entry').click(function() {
-        commentEntryModel("{% url 'blog:comment' view.kwargs.author_name blog.id %}", 1);
+        commentEntryModel("{% url 'blog:comment' view.kwargs.author_name object.id %}", 1);
         commentSaveDone = function(data) {
           showAlertModal('info', data.message);
         };

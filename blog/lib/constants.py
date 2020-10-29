@@ -10,5 +10,5 @@ PERMISSION_COMMENT_REPLY = 'comment_reply'
 class AuthorFlag(enum.Enum):
     COMMENT_FLAG = 1 << 0
 
-class BlogFlag(enum.Enum):
+class PostFlag(enum.Enum):
     COMMENT_FLAG = 1 << 0

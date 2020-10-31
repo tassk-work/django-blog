@@ -26,20 +26,25 @@ RE_PATTERNS = (
 
 # codestart:Command
 class Command(BaseCommand):
-    def add_arguments(self, parser):
-        parser.add_argument('templates')
+
+    def get_template_path(self, author_name, language_code, template_text):
+        lang_path = '' if language_code == settings.LANGUAGE_CODE else f'{language_code}/'
+        template_relpath = f'/blog/{author_name}/{lang_path}{template_text}.html'
+        for dir in settings.TEMPLATES[0]['DIRS']:
+            template_path = f'{dir}/{template_relpath}'
+            if os.path.exists(template_path):
+                return template_path
 
     def handle(self, *args, **options):
         posts = models.Post.objects.all()
-        timestamps = []
         for post in posts:
-            for language_code in [lang[0] for lang in settings.LANGUAGES]:
-                lang = '' if language_code == settings.LANGUAGE_CODE else f'{language_code}/'
-                path = f'{options["templates"]}/blog/{post.author.user.username}/{lang}{post.template_text}.html'
-                contents = self.read(path)
-                if not contents:
+            timestamps = []
+            for language_code in [l[0] for l in settings.LANGUAGES]:
+                template_path = self.get_template_path(post.author.user.username, language_code, post.template_text)
+                if not template_path:
                     continue
-                post_content = post.postcontent_set.filter(language_code=language_code).first()
+                contents = self.read(template_path)
+                post_content = post.postcontent_set.get(language_code=language_code)
                 if post_content:
                     process = 'UPDATE'
                 else:
@@ -52,16 +57,14 @@ class Command(BaseCommand):
                 content_search = self.edit_search(contents['content'])
                 post_content.search_text = f'{post_content.title_text} {content_search}'
                 post_content.save()
-                print(f'Content:{process} {post_content.id},{post_content.language_code},{post_content.title_text},{post_content.summary_text[:20]},{post_content.search_text[:20]}')
-                timestamps.append(os.path.getmtime(path))
+                print(f'  Content:{process}:{post_content.id},{post_content.language_code},{post_content.title_text},{post_content.summary_text[:20]},{post_content.search_text[:20]}')
+                timestamps.append(os.path.getmtime(template_path))
         
-        post.updated_date = timezone.make_aware(datetime.datetime.fromtimestamp(max(timestamps)))
-        post.save()
-        print(f'Post:{post.id},{post.updated_date}')
+            post.updated_date = timezone.make_aware(datetime.datetime.fromtimestamp(max(timestamps)))
+            post.save()
+            print(f'Post:{post.id},{len(timestamps)},{post.updated_date}')
     
     def read(self, path):
-        if not os.path.exists(path):
-            return
         with open(path,'r') as f:
             text = f.read()
         return {

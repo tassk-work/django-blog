@@ -10,7 +10,7 @@
           <a class="blog-header-logo text-dark" href="{% url 'blog:index' view.kwargs.author_name %}">{% block main_title %}{% block main_author_title %}{{ view.kwargs.author.title_text }}{% endblock %}{% endblock %}</a>
         </div>
         <div class="col-6 d-flex justify-content-end align-items-center">
-          <div class="row">
+          <div class="row w-100">
             <div class="col text-right" style="min-width:8rem;">
               <form action="{% url 'set_language' %}" method="POST">
                 {% csrf_token %}

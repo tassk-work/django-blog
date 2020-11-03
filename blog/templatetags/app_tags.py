@@ -4,6 +4,7 @@ import re
 from django import template
 from django.db.models import Count
 from django.utils import html
+from django.urls import reverse
 
 from blog import models
 from blog.lib import utils
@@ -46,7 +47,13 @@ def striptags2(tag_str):
 
 @register.filter
 def strip(str):
-    return str.strip();
+    return str.strip()
+
+@register.simple_tag(takes_context=True)
+def reverse_detail(context, kwargs, template):
+    post_id = kwargs['post_ids'].get(template, None)
+    if post_id:
+        return reverse('blog:detail', args=(kwargs['author_name'], post_id))
 
 @register.simple_tag(takes_context=True)
 def get_ads_index(context, length):

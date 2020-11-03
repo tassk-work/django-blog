@@ -22,10 +22,12 @@ from django.urls import include
 from . import sitemaps
 
 # codestart:001
-urlpatterns = i18n_patterns(
+urlpatterns = [
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps.sitemaps}, name='sitemap'),
+]
+urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls),
     path('blog/', include('blog.urls')),
-    path('sitemap.xml', sitemap, {'sitemaps': sitemaps.sitemaps}, name='sitemap'),
     path('i18n/', include('django.conf.urls.i18n')),
     prefix_default_language=False,
 )

@@ -15,7 +15,6 @@ See [documentation](https://tassk.work/blog/sysja/)
  
 * [システムの解説サイト](https://tassk.work/blog/sysja/)
 * [SE備忘録](https://tassk.work/blog/seja/)
-* [Coding Note](https://tassk.work/blog/seen/)
 
 # License
  

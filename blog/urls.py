@@ -14,7 +14,9 @@ urlpatterns = [
     path('<slug:author_name>/comment/<int:post_id>/', views.comment, name='comment'),
     path('<slug:author_name>/comment/<int:comment_id>/update', views.comment_update, name='comment_update'),
     path('<slug:author_name>/reply/<int:comment_id>/', views.reply, name='reply'),
-
-    path('<slug:author_name>/<slug:template_name>/', views.BlogDetailTest.as_view(), name='detail_test'),
 ]
 # codeend:001
+
+urlpatterns += [
+    path('<slug:author_name>/<slug:template_name>/', views.BlogDetailTest.as_view(), name='detail_test'),
+]

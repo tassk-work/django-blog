@@ -75,21 +75,17 @@ class RelatedModelAdmin(admin.ModelAdmin):
 
 # codestart:Author
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ('author_name', 'title_text_link', 'email', 'flags', 'post')
+    list_display = ('title_text', 'author_name', 'email', 'flags', 'post')
     ordering = ('id',)
     search_fields = ('author_name', 'title_text', 'email')
     exclude = ('user',)
 
     def author_name(sef, obj):
-        return obj.user.username
-
-    def title_text_link(sef, obj):
-        href = reverse('blog:index', kwargs={'author_name':obj.user.username})
-        return format_html('<a href="{}" target="blog">{}</a>', href, obj.title_text)
-    title_text_link.short_description = 'title_text'
+        href = reverse('admin:auth_user_change', args=(obj.user.id,))
+        return format_html('<a href="{}">{}</a>', href, obj.user.username)
 
     def post(sef, obj):
-        href = reverse('blog:index', kwargs={'author_name':obj.user.username})
+        href = reverse('blog:index', args=(obj.user.username,))
         return format_html('<a href="{}" target="blog">{}</a>', href, obj.post_set.count())
 
     def email(sef, obj):
@@ -112,7 +108,7 @@ class PostAdmin(AplModelAdmin):
     search_fields = ('template_text',)
     
     def title_text(sef, obj):
-        href = reverse('blog:detail', kwargs={'author_name':obj.author.user.username, 'pk':obj.id})
+        href = reverse('blog:detail', args=(obj.author.user.username, obj.id))
         return format_html('<a href="{}" target="blog">{}</a>', href, obj.get_title_text())
 
     def category(sef, obj):
@@ -134,10 +130,7 @@ class PostContentAdmin(RelatedModelAdmin):
     language_code_short.short_description = 'lang'
 
     def title_text_link(sef, obj):
-        href = utils.reverse('blog:detail', obj.language_code, {
-            'author_name': obj.post.author.user.username,
-            'pk': obj.post.id
-        })
+        href = utils.reverse('blog:detail', obj.language_code, obj.post.author.user.username, obj.post.id)
         return format_html('<a href="{}" target="blog">{}</a>', href, obj.title_text)
     title_text_link.short_description = "title_text"
 

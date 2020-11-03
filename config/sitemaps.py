@@ -60,13 +60,12 @@ class AuthorSitemap(BlogSitemap):
     priority = 0.5
 
     def items(self):
-        # models.Author.objects.values('id','user__username').annotate(updated_date=Max('post__updated_date')).order_by('id')
         items = models.PostContent.objects.values_list('post__author__user__username', 'language_code') \
                 .annotate(updated_date=Max('post__updated_date')).order_by('post__author_id')
         return [{'key':item[0], 'language_code':item[1], 'updated_date':item[2]} for item in items]
 
     def reverse(self, obj):
-        return reverse('blog:index', args=[obj['key']])
+        return reverse('blog:index', args=(obj['key'],))
 
     def lastmod(self, obj):
         return obj['updated_date']
@@ -89,7 +88,7 @@ class PostSitemap(BlogSitemap):
             } for item in items]
 
     def reverse(self, obj):
-        return reverse('blog:detail', args=[obj['auth_name'], obj['id']])
+        return reverse('blog:detail', args=(obj['auth_name'], obj['id'],))
 
     def lastmod(self, obj):
         return obj['updated_date']

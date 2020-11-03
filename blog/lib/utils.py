@@ -33,6 +33,6 @@ def get_languages(request, available_languages):
     if selectable_languages:
         return selectable_languages if len(selectable_languages) == 1 else enable_languages
 
-def reverse(viewname, language_code, kwargs):
+def reverse(viewname, language_code, *args):
     lang = '' if language_code == settings.LANGUAGE_CODE else f'/{language_code}'
-    return f'{lang}{django_reverse(viewname, kwargs = kwargs)}'
+    return f'{lang}{django_reverse(viewname, args=args)}'

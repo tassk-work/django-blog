@@ -12,7 +12,7 @@ def comment_notification(request, comment):
     subject = _('COMMENT_NOTIFICATION_SUBJECT').format(comment.post.author.title_text)
     context = {
         'comment': comment,
-        'url': request.build_absolute_uri(reverse('blog:detail', args=[comment.post.author.user.username, comment.post.id])),
+        'url': request.build_absolute_uri(reverse('blog:detail', args=(comment.post.author.user.username, comment.post.id))),
     }
     message = render_to_string('blog/mails/comment_notification.txt', context, request)
     from_email = settings.DEFAULT_FROM_EMAIL

@@ -38,9 +38,9 @@
     "fields": {
         "post": 1,
         "language_code": "ja",
-        "title_text": "サンプル投稿",
-        "summary_text": "サンプル投稿です。",
-        "search_text": "サンプル投稿です。"
+        "title_text": "サンプル記事",
+        "summary_text": "サンプル記事です。",
+        "search_text": "サンプル記事です。"
     }
 },
 {

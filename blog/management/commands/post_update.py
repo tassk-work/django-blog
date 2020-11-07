@@ -44,7 +44,7 @@ class Command(BaseCommand):
                 if not template_path:
                     continue
                 contents = self.read(template_path)
-                post_content = post.postcontent_set.get(language_code=language_code)
+                post_content = post.postcontent_set.filter(language_code=language_code).first()
                 if post_content:
                     process = 'UPDATE'
                 else:
